@@ -13,7 +13,7 @@
 //  DIO0    |           22          |       A0          |   <user-defined>
 //  LED     |           2           |   LED_BUILTIN     |
 
-#define MODE TX
+#define MODE TX    // set mode to TX or RX
 #define NSS 5
 #define RST 21
 #define DIO0 22
