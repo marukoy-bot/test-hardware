@@ -4,6 +4,6 @@ repository containing working test sketches and code for hardware modules and mi
 # Tested Components
 | MCU | modules |
 | --- | --- |
-| ESP32 | 0V7679, ILI9341, HCSR04, JSN-SR04M, DHT11 |
-| Arduino | HCSR04, JSN-SR04M, DHT11 |
-| Tang Nano 9K FPGA | SPI LCD |
+| ESP32 | 0V7679, ILI9341, HCSR04, JSN-SR04M, DHT11, 16x2 I²C LCD, SX1278 |
+| Arduino | HCSR04, JSN-SR04M, DHT11, 16x2 I²C LCD, SX1278 |
+| Tang Nano 9K FPGA | SPI LCD, SX1278 |
