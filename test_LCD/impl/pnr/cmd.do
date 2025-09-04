@@ -1,0 +1,15 @@
+-d D:\HDL\Gowin\test_LCD\test_LCD\impl\gwsynthesis\test_LCD.vg
+-p GW1NR-9C-QFN88P-6
+-pn GW1NR-LV9QN88PC6/I5
+-cst D:\HDL\Gowin\test_LCD\test_LCD\src\TOP.cst.cst
+-cfg D:\HDL\Gowin\test_LCD\test_LCD\impl\pnr\device.cfg
+-sdc D:\HDL\Gowin\test_LCD\test_LCD\src\test_LCD.sdc
+-bit
+-tr
+-ph
+-timing
+-cst_error
+-convert_sdp32_36_to_sdp16_18
+-correct_hold 1
+-route_maxfan 23
+-global_freq 50.000
