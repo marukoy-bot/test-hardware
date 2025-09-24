@@ -10,7 +10,8 @@
 #define MODE_UART 1
 #define MODE_NORMAL 0
 
-#define MODE MODE_UART
+//#define MODE MODE_UART
+#define MODE MODE_NORMAL
 
 #define trig 12
 #define echo 14
