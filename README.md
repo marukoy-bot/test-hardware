@@ -18,18 +18,16 @@ repository containing working test sketches and code for modules and microcontro
 | SPI LCD |  |  | ✔ |
 | SX1278 LoRa module | ✔ | ✔ | ✔ |
 
----
-
-## compilation for different LoRa modes
+# compilation for different LoRa modes
 Set the envs in the `.ini` file for `lora_rx` and `lora_tx` then run `pio run -e <lora_rx or lora_tx>`
 
-## global installation of libraries
+# global installation of libraries
 `pio pkg install -g --library "<library name from pio library tab>"`
 
-## Never forgetti
+# Never forgetti
 - add the pio.exe to environment variabes
 - do not include angled brackets <>
 
-## Extra Notes
+# Extra Notes
 - Some ESP32s require the `boot` button to be held while uploading sketch, attach a 10uF capacitor parallel to the `boot` button
 - L CH340G 🥀, W CP2102 🙏 
