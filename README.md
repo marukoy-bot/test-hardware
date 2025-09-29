@@ -24,7 +24,7 @@ Set the envs in the `.ini` file for `lora_rx` and `lora_tx` then run `pio run -e
 
 # Global installation of libraries
 `pio pkg install -g --library "<library name from pio library tab>"` 
-or 
+**or**
 `pio pkg install -g --library "<git url>"`
 
 # Custom `debug.h` header file
