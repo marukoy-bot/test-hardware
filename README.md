@@ -3,7 +3,7 @@ repository containing working test sketches and code for modules and microcontro
 
 # Tested Components
 | Module/Peripheral | Arduino | Espressif | Tang Nano 9k FPGA |
-| --- | --- | --- | --- |
+| --- | :---: | :---: | :---: |
 | 0V7679 Camera Module | ✔ | ✔ | |
 | 16x2 I²C LCD | ✔ | ✔ | |
 | 28BYJ-48 5v Stepper Motor + ULN2003 driver | ✔ | ✔ | |
