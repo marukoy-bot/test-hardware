@@ -28,17 +28,17 @@ or
 `pio pkg install -g --library "<git url>"`
 
 # Custom `debug.h` header file
-Create a "debug" folder inside the library folder and copy-paste the `debug.h` header file inside that folder
-- PlatformIO: C:\Users\\<username>\\.platformio\lib
-- Arduino IDE: C:\Users\\<username>\Documents\Arduino\libraries
+Create a **debug** folder inside the library folder and copy-paste the `debug.h` header file inside that folder
+- **PlatformIO:** `C:\Users\<username>\.platformio\lib`
+- **Arduino IDE:** `C:\Users\<username>\Documents\Arduino\libraries`
 
-Add this build flag in the `.ini` file, setting the DDEBUG value to `1` enables debugging, while `0` disables it
+Add this build flag in the `.ini` file, setting the **DDEBUG** value to `1` enables debugging, while `0` disables it
 `build_flags = -DDEBUG=<value>`
 
 # Never forgetti
 - add the `pio.exe` to environment variabes
-- do not include angled brackets <>
+- **do not** include angled brackets <>
 
 # Extra Notes
-- Some ESP32s require the `boot` button to be held while uploading sketch, attach a 10uF capacitor parallel to the `boot` button
+- Some ESP32s require the **boot** button to be held while uploading sketch, attach a 10uF capacitor parallel to the **boot** button
 - L CH340G 🥀, W CP2102 🙏 
