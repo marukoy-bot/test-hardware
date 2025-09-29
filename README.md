@@ -23,11 +23,15 @@ repository containing working test sketches and code for modules and microcontro
 Set the envs in the `.ini` file for `lora_rx` and `lora_tx` then run `pio run -e <lora_rx or lora_tx>`
 
 # Global installation of libraries
-`pio pkg install -g --library "<library name from pio library tab>"`
-or
+`pio pkg install -g --library "<library name from pio library tab>"` 
+or 
 `pio pkg install -g --library "<git url>"`
 
 # Custom `debug.h` header file
+Create a "debug" folder inside the library folder and copy-paste the `debug.h` header file inside that folder
+- PlatformIO: C:\Users\<username>\.platformio\lib
+- Arduino IDE: C:\Users\<username>\Documents\Arduino\libraries
+
 Add this build flag in the `.ini` file, setting the DDEBUG value to `1` enables debugging, while `0` disables it
 `build_flags = -DDEBUG=<value>`
 
