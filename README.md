@@ -8,6 +8,12 @@ repository containing working test sketches and code for modules and microcontro
 | Arduino |   | ✔ | ✔ | ✔ | ✔ | ✔ | ✔ |   | ✔ | ✔ | ✔ |   |
 | Tang Nano 9k |   |   |   |   |   |   |   |   |   |   |   | ✔ |
 
+| Module | Arduino | ESP32 | Tang Nano 9k FPGA |
+| --- | --- | --- | --- |
+| 0V7679 Camera Module | ✔ | ✔ | |
+| 16x2 I²C LCD | ✔ | ✔ | |
+| 28BYJ-48 5v Stepper Motor + ULN2003 driver | ✔ | ✔ | |
+
 ## compilation for different LoRa modes
 Set the envs in the `.ini` file for `lora_rx` and `lora_tx` then run `pio run -e <lora_rx or lora_tx>`
 
@@ -18,6 +24,6 @@ Set the envs in the `.ini` file for `lora_rx` and `lora_tx` then run `pio run -e
 - add the pio.exe to environment variabes
 - do not include angled brackets <>
 
-# Extra Notes
+## Extra Notes
 - Some ESP32s require the `boot` button to be held while uploading sketch, attach a 10uF capacitor parallel to the `boot` button
 - L CH340G 🥀, W CP2102 🙏 
