@@ -2,7 +2,7 @@
 repository containing working test sketches and code for modules and microcontrollers
 
 # Tested Components
-| Module/Peripheral | Arduino | ESP32 | Tang Nano 9k FPGA |
+| Module/Peripheral | Arduino | Espressif | Tang Nano 9k FPGA |
 | --- | --- | --- | --- |
 | 0V7679 Camera Module | ✔ | ✔ | |
 | 16x2 I²C LCD | ✔ | ✔ | |
@@ -18,10 +18,10 @@ repository containing working test sketches and code for modules and microcontro
 | SPI LCD |  |  | ✔ |
 | SX1278 LoRa module | ✔ | ✔ | ✔ |
 
-# compilation for different LoRa modes
+# Compilation for different LoRa modes
 Set the envs in the `.ini` file for `lora_rx` and `lora_tx` then run `pio run -e <lora_rx or lora_tx>`
 
-# global installation of libraries
+# Global installation of libraries
 `pio pkg install -g --library "<library name from pio library tab>"`
 
 # Never forgetti
