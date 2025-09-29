@@ -16,7 +16,9 @@ repository containing working test sketches and code for modules and microcontro
 | SEN0564 Mems CO Sensor| | ✔ | |
 | SIM800L (and EVB) GSM Module | ✔ | ✔ | |
 | SPI LCD |  |  | ✔ |
-| SX1278 LoRa module | ✔ | ✔ |  |
+| SX1278 LoRa module | ✔ | ✔ | ✔ |
+
+---
 
 ## compilation for different LoRa modes
 Set the envs in the `.ini` file for `lora_rx` and `lora_tx` then run `pio run -e <lora_rx or lora_tx>`
