@@ -11,9 +11,9 @@
 
 #include <Arduino.h>
 #include <LiquidCrystal_I2C.h>
-
 #include <SPI.h>
 #include <LoRa.h>
+#include "debug.h"
 
 #define NSS 5
 #define RST 32
@@ -30,8 +30,9 @@ String lora_id = "0x01";
 void printLCD(String message, int row);
 
 void setup() {
+#if DEBUG == 1
     Serial.begin(115200);
-
+#endif
     lcd.init();
     lcd.backlight();
 
@@ -42,11 +43,11 @@ void setup() {
     pinMode(LED, OUTPUT); 
     
     if (!LoRa.begin(433E6)) {
-        Serial.println("LoRa initialization failed.");
+        debugln("LoRa initialization failed.");
         while(1);
     }
 
-    Serial.println("LoRa RX ready.");
+    debugln("LoRa RX ready.");
 
     lcd.setCursor(0, 0);
     lcd.print("LoRa RX");
@@ -64,7 +65,7 @@ void loop() {
         while(LoRa.available()) {
             message += (char)LoRa.read();
         }
-        Serial.println(message);
+        debugln(message);
         message.trim();
         
         o_bracketIndex = message.indexOf('<');
