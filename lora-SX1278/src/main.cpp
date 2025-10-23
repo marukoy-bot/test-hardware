@@ -1,92 +1,100 @@
 #include <Arduino.h>
-#include <LiquidCrystal_I2C.h>
+#include <WiFi.h>
+#include <WebServer.h>
+#include <WebSocketsServer.h>
 
-#include <SPI.h>
-#include <LoRa.h>
+const char* ap_ssid = "ESP32 RX";
+const char* ap_password = "00000000";
+#define WS_PORT 81
 
-//   Pin    |   ESP23 Dev Module    |   Arduino UNO     |
-//----------|-----------------------|-------------------|
-//  NSS     |           5           |       10          |
-//  MOSI    |           23          |       11          |
-//  MISO    |           19          |       12          |
-//  SCK     |           18          |       13          |
-//  RST     |           21          |       A1          |   <user-defined>
-//  DIO0    |           22          |       A0          |   <user-defined>
-//  LED     |           2           |   LED_BUILTIN     |
+String g_pos_web = "___";  // for web (UTF-8)
+String g_dist = "___";
 
-#define MODE_TX 0 
-#define MODE_RX 1
+WebServer server(80);
+WebSocketsServer webSocket(WS_PORT);
 
-#define MODE MODE_RX    // set mode to MODE_TX or MODE_RX
+const char index_html[] PROGMEM = R"rawliteral(
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>ESP32 LoRa RX</title>
+  <style>
+    body { font-family: Arial, sans-serif; text-align:center; margin-top:40px; }
+    .card { display:inline-block; padding:20px 30px; border-radius:8px; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+    h1 { margin:0 0 10px 0; }
+    .value { font-size:2.4rem; margin:10px 0; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>ESP32 LoRa Receiver</h1>
+    <div>Position (angle): <div id="pos" class="value">--</div></div>
+    <div>Distance: <div id="dist" class="value">--</div></div>
+    <p><small>Connect to Wi-Fi SSID: <strong>ESP32 RX</strong></small></p>
+  </div>
 
-#define NSS 5
-#define RST 32
-#define DIO0 33
+<script>
+  var gateway = "192.168.4.1";
+  var ws;
+  function initWS() {
+    ws = new WebSocket("ws://" + gateway + ":81/");
+    ws.onopen = function() { console.log("WS open"); };
+    ws.onclose = function() { console.log("WS closed, retry in 2s"); setTimeout(initWS, 2000); };
+    ws.onmessage = function(evt) {
+      try {
+        var obj = JSON.parse(evt.data);
+        if (obj.pos !== undefined) document.getElementById('pos').innerHTML = obj.pos;
+        if (obj.dist !== undefined) document.getElementById('dist').innerText = obj.dist;
+      } catch(e) { console.log("parse err", e); }
+    };
+  }
+  window.onload = initWS;
+</script>
+</body>
+</html>
+)rawliteral";
 
-LiquidCrystal_I2C lcd(0x27, 20, 4);
+void broadcastUpdate() {
+    g_pos_web = String(random(0, 100));
+    g_dist = String(random(0, 100));
+  String payload = "{\"pos\":\"" + g_pos_web + "\",\"dist\":\"" + g_dist + "\"}";
+  webSocket.broadcastTXT(payload);
+}
 
-int io[] = {32, 33, 25, 26, 27, 14, 13, 4};
-byte data = 0;
-int num = 0;
+void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length) {
+  if (type == WStype_CONNECTED) {
+    broadcastUpdate();
+  }
+}
+
+void handleRoot() {
+  server.send_P(200, "text/html", index_html);
+}
 
 void setup() {
     Serial.begin(115200);
+    WiFi.softAP(ap_ssid, ap_password);
+    IPAddress ip = WiFi.softAPIP();
+    Serial.println("AP IP: ");
+    Serial.println(ip);
 
-    LoRa.setPins(NSS, RST, DIO0);
-    pinMode(2, OUTPUT);
-    
-    if (!LoRa.begin(433E6)) {
-        while(1);
-    }
+    server.on("/", handleRoot);
+    server.begin();
+    Serial.println("HTTP Server Started.");
 
-#if MODE == MODE_TX
-    for (auto i : io) pinMode(i, INPUT);
-    Serial.println("LoRa in Transmitter Mode.");
-#elif MODE == MODE_RX
-    lcd.init();
-    lcd.backlight();
-    for (auto i : io) pinMode(i, OUTPUT);
-    Serial.println("LoRa Receiver Mode.");
-
-    lcd.setCursor(0, 0);
-    lcd.print("LoRa receiver.");
-    lcd.setCursor(0, 1);
-    lcd.print("initiated successfully.");
-#endif
+    webSocket.begin();
+    webSocket.onEvent(webSocketEvent);
+    Serial.println("Websocket server started on port: " + String(WS_PORT));
 }
 
+unsigned long lastBroadcast = 0;
 void loop() {
-#if MODE == MODE_TX
-    data = 0x55;    // dummy data
-    // for(int i = 0; i < 8; i++) {
-    //     data |= (!digitalRead(io[i]) << i);
-    // }
+    server.handleClient();
+    webSocket.loop();
 
-    LoRa.beginPacket();
-    LoRa.println(String(num++) + "Sending message from TX");
-    //LoRa.write(data);
-    LoRa.endPacket();
-    delay(1000);
-
-#elif MODE == MODE_RX
-String message;
-int parsePacket = LoRa.parsePacket();
-
-if (parsePacket) {
-    lcd.clear();
-    Serial.println("data received: ");
-    while(LoRa.available()) {
-        message += (char)LoRa.read();
+    if(millis() - lastBroadcast > 1000) {
+        lastBroadcast = millis();
+        broadcastUpdate();
     }
-    Serial.println(message);
-    //Serial.println(data, BIN);
-    
-    
-    
-    //for (int i = 7; i >= 0; i--) digitalWrite(io[i], data & (1 << i));
-}
-
-    lcd.setCursor(0, 0);
-    lcd.print(message);
-#endif
-}
+}  
