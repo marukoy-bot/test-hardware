@@ -4,8 +4,8 @@
 // #define RX 17 // tx on gsm
 // #define TX 16 //rx on gsm
 
-#define RX 3
-#define TX 4
+#define RX 16
+#define TX 17
 
 SoftwareSerial gsm(RX, TX);
 
@@ -17,41 +17,27 @@ void update();
 
 
 void setup() {
-    Serial.begin(9600);
+    Serial.begin(115200);
     gsm.begin(9600);
 
-    Serial.print("Initializing... ");
-    delay(200);
-    Serial.println("Done");
     gsm.println("AT");
-    update();
     delay(500);
+    update();
 
-    Serial.print("updating time...");
-    gsm.println("AT+CLTS=1");
-    update();
-    gsm.println("AT&W");
-    update();
-    Serial.println("Done");
-    // gsm.println("AT+SAPBR=3,1,\"Contype\",\"GPRS\"");
-    // update();
-    // delay(500);
-    // gsm.println("AT+SAPBR=3,1,\"APN\",\"CMNET\"");
-    // update();
-    // delay(500);
-    // gsm.println("AT+SAPBR=1,1");
-    // update();
-    // delay(500);
-    // gsm.println("AT+SAPBR=2,1");
-    // update();
-    // delay(2000);
-    // gsm.println("AT+CIPGSMLOC=2,1");
-    // update();
-    // delay(2000);
-    // String location = getLoc();
-    // gsm.println("AT+SAPBR=0,1");
-    // update();
-    // delay(500);
+    gsm.println("AT+CSCS=\"GSM\"");
+    delay(500);
+    update(); 
+
+    gsm.println("AT+CNMI=1,2,0,0,0");
+    delay(500);
+    update(); 
+
+    gsm.println("AT+CMGF=1");
+    delay(500);
+    update(); 
+
+    //DeleteSMS();
+    Serial.println("Initialized");
 
     String time = getTime();
     update();
@@ -75,9 +61,7 @@ void setup() {
 
 void update()
 {
-    delay(500);
     while(gsm.available()) Serial.write((char)gsm.read());
-    while(Serial.available()) gsm.write(Serial.read());
 }
 
 String getLoc()

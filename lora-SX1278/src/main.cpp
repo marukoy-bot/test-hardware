@@ -56,7 +56,6 @@ const char index_html[] PROGMEM = R"rawliteral(
 )rawliteral";
 
 void broadcastUpdate() {
-    g_pos_web = String(random(0, 100));
     g_dist = String(random(0, 100));
   String payload = "{\"pos\":\"" + g_pos_web + "\",\"dist\":\"" + g_dist + "\"}";
   webSocket.broadcastTXT(payload);
@@ -89,12 +88,28 @@ void setup() {
 }
 
 unsigned long lastBroadcast = 0;
+bool cw = true;
+int currPos = 0;
 void loop() {
     server.handleClient();
     webSocket.loop();
 
-    if(millis() - lastBroadcast > 1000) {
+    if (millis() - lastBroadcast > 1000) {
         lastBroadcast = millis();
-        broadcastUpdate();
+        if (cw) {
+            currPos += 30;
+            g_pos_web = String(currPos);
+            Serial.println(g_pos_web);
+            broadcastUpdate();
+            if (currPos >= 360) cw = false;
+        }
+        else {
+            currPos -= 30;
+            g_pos_web = String(currPos);
+            Serial.println(g_pos_web);
+            broadcastUpdate();
+            if (currPos < 0) cw = true;
+        }
     }
+    
 }  
